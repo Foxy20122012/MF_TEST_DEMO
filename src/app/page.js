@@ -6,9 +6,10 @@ class HomePage extends Component{
   render(){
     return(
       <div className="text-center">
-        Hello World!
-        prueba docker
+         Prueba testing
+         <div>prueba 2</div>
       </div>
+
     )
   }
 }
