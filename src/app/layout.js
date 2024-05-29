@@ -1,4 +1,6 @@
 import { Inter } from "next/font/google";
+import 'devextreme/dist/css/dx.light.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import "@/styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
