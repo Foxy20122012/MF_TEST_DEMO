@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import 'devextreme/dist/css/dx.light.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import "@/styles/globals.css";
+import BtnAppBar from "@/layout/appBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,7 +14,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+     <body className={inter.className}>
+        <div className="flex  md:my-20 md:ml-4">
+          
+            <BtnAppBar />
+            {children}
+          
+        </div>
+      </body>
     </html>
   );
 }
