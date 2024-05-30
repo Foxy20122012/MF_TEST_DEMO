@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 import React, { useState } from "react";
 import List from "@mui/material/List";
@@ -52,12 +51,12 @@ const Sidebar = () => {
     },
     {
       text: "Ventas",
-      link: "/ventas",
+      onClick: handleVentasClick,
       icon: <GiMoneyStack className="m-3 text-xl font-bold" />,
     },
     {
-      text: "Planilla",
-      link: "/planilla",
+      text: "Empleados",
+      link: "/employee",
       icon: <BsFileEarmarkSpreadsheet className="m-3 text-xl font-bold" />,
     },
     {
@@ -129,7 +128,7 @@ const Sidebar = () => {
               </Collapse>
             )}
 
-            {/* Renderizar el submenú de Ventas si el botón de Ventas se ha hecho clic */}
+            {/* Renderizar el submenú de Ventas si el botón de Ventas se ha hecho click */}
             {item.text === "Ventas" && (
               <Collapse in={ventasOpen}>
                 {/* Agrega tus opciones de submenú de Ventas aquí */}

@@ -31,7 +31,7 @@ const MainLayout = () => {
               <AiOutlinePicRight className="text-2xl" />
             </Button>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Servicios RchNorte
+              Testing Prueba
             </Typography>
             {/* <Button color="inherit">
               <BiUserCircle size={24} style={{ marginRight: '16px' }} />

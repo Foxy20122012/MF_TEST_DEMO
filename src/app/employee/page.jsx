@@ -2,9 +2,10 @@
 import 'devextreme/dist/css/dx.light.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import React from "react";
-import { Button } from 'devextreme-react/button'
+import { Toast } from 'devextreme-react/toast';
 import DataGrid, { Column, ColumnChooser, ColumnFixing, Editing, Popup, Paging, Form, Export, Grouping, GroupPanel, Pager, 
     SearchPanel, FilterRow, HeaderFilter, FilterPanel, FilterBuilderPopup, Scrolling, Item } from "devextreme-react/data-grid";
+    
 
 class App extends React.Component {
     constructor(props) {
@@ -37,6 +38,78 @@ class App extends React.Component {
             .catch((error) => console.error("Error:", error));
     };
 
+    insertarEmpleado = (nuevoEmpleado) => {
+        fetch(`http://localhost:5051/Empleado/Insert`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(nuevoEmpleado)
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al insertar el empleado');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Realiza cualquier acción adicional después de insertar el empleado
+          console.log('Empleado insertado:', data);
+        })
+        .catch(error => {
+          console.error('Error al insertar el empleado:', error);
+        });
+      };
+      
+      eliminarEmpleado = (id) => {
+        fetch(`http://localhost:5051/Empleado/Delete/${id}`, {
+          method: 'DELETE'
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al eliminar el empleado');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Realiza cualquier acción adicional después de eliminar el empleado
+          console.log('Empleado eliminado:', data);
+        })
+        .catch(error => {
+          console.error('Error al eliminar el empleado:', error);
+        });
+      };
+      
+      actualizarEmpleado = (id, cambios) => {
+        // Obtener el empleado existente
+        const empleadoExistente = this.state.employees.find(emp => emp.idEmpleado === id);
+      
+        // Mezclar los cambios con el empleado existente
+        const empleadoActualizado = { ...empleadoExistente, ...cambios };
+      
+        fetch(`http://localhost:5051/Empleado/Update/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(empleadoActualizado)
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al actualizar el empleado');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Realiza cualquier acción adicional después de actualizar el empleado
+          console.log('Empleado actualizado:', data);
+        })
+        .catch(error => {
+          console.error('Error al actualizar el empleado:', error);
+        });
+      };
+      
+      
     render() {
         const {
             showColumnLines,
@@ -64,6 +137,37 @@ class App extends React.Component {
                     onFocusedRowChanged={(e) => {
                       this.setState({ focusedRowKey: e.row?.id });
                     }}
+                    onEditingStart={() => alert("EditingStart")}
+                    onSaving={(e) => {
+                        if (window.confirm("¿Estás seguro de que quieres guardar los cambios?")) {
+                          const cambios = e.changes[0].data; // Obtener los cambios realizados
+                          const key = e.changes[0].key; // Obtener la key de la tarea
+                          if (key && typeof key === "string" && key.startsWith("_DX_KEY_")) {
+                            // Es una inserción
+                            this.insertarEmpleado(cambios);
+                          } else {
+                            // Es una actualización
+                            const id = key;
+                            this.actualizarEmpleado(id, cambios);
+                          }
+                        } else {
+                          e.cancel = true; // Cancelar la operación si el usuario cancela la confirmación
+                        }
+                      }}
+                      
+        
+        onRowRemoving={(e) => {
+          if (
+            window.confirm(
+              "¿Estás seguro de que quieres eliminar este registro?"
+            )
+          ) {
+            this.eliminarEmpleado(e.data.idEmpleado);
+          } else {
+            e.cancel = true; // Cancela la eliminación si el usuario cancela la confirmación
+          }
+        }}
+        onRowRemoved={() => alert("Eliminacion confirmada")}
                     >
                     <Editing
                         mode="popup"
@@ -92,7 +196,8 @@ class App extends React.Component {
                             </Form>
                         </Popup>
                     </Editing>
-                    <Column dataField="idEmpleado" caption="ID Empleado" />
+                    <ColumnChooser enabled={true} />
+                    <ColumnFixing enabled={true} />
                     <Column dataField="nombre" caption="Nombre" />
                     <Column dataField="apellido" caption="Apellido" />
                     <Column dataField="telefono" caption="Teléfono" />
