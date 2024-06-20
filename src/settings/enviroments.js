@@ -16,13 +16,13 @@ module.exports = {
                 },
                 warehouse:{
                     products:{
-                        products: '/',
-                        productDestails: '/'
+                        products: '/api/products',
+                        productDestails: '/api/productdetails'
                     }
                 },
                 sales:{
                     sales:{
-                        clients: '/'
+                        clients: '/api/customers'
                     }
                 }
             }

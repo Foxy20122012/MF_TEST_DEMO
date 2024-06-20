@@ -23,7 +23,7 @@ const MainLayout = () => {
       {showSidebar && <Sidebar />}
 
       {/* Contenido principal */}
-      <Box sx={{ flexGrow: 1, ml: showSidebar ? 30 : 0 }}>
+      <Box sx={{ flexGrow: 1, ml: showSidebar ? 2 : 0 }}>
         {/* AppBar */}
         <AppBar sx={{ backgroundColor: '#0071D5', color: 'black', position: 'fixed', zIndex: 10, width: '100%' }}>
           <Toolbar>

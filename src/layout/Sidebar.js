@@ -6,43 +6,39 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import { LuFiles } from "react-icons/lu";
+import { PiGithubLogoLight } from "react-icons/pi";
+import { FaGitAlt } from "react-icons/fa6";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { BsBoxSeam, BsFileEarmarkSpreadsheet } from "react-icons/bs";
-import { IoIosArrowForward } from "react-icons/io";
-import { GiPayMoney, GiMoneyStack } from "react-icons/gi";
-import { FiBox, FiArrowLeft } from "react-icons/fi";
+import { VscGithubAction } from "react-icons/vsc";
 import { PiNotePencilFill } from "react-icons/pi";
-import { AiOutlineFundProjectionScreen } from "react-icons/ai";
+import { FaBoxes } from "react-icons/fa";
+import { BiSolidCategoryAlt } from "react-icons/bi";
 import Collapse from "@mui/material/Collapse";
 
 const Sidebar = () => {
-  const [inventoryOpen, setInventoryOpen] = useState(false); // Estado para controlar la apertura del submenú
-  const [ventasOpen, setVentasOpen] = useState(false); // Estado para controlar la apertura del submenú de Ventas
+ 
+  const [repositoryOpen, setRepositoryOpen] = useState(false); // Estado para controlar la apertura del submenú de Ventas
 
-  const handleInventoryClick = () => {
-    setInventoryOpen(!inventoryOpen);
-  };
-
-  const handleVentasClick = () => {
-    setVentasOpen(!ventasOpen);
+  const handleRepositoryClick = () => {
+    setRepositoryOpen(!repositoryOpen);
   };
 
   const sidebarItems = [
     {
-      text: "Documentación",
-      link: "/",
-      icon: <LuFiles className="m-3 text-xl font-bold" />,
+      text: "Productos",
+      link: "/products",
+      icon: <FaBoxes className=" text-xl font-bold" />,
     },
     {
-      text: "Pendientes",
+      text: "Detalles productos",
       link: "/nota",
       icon: <PiNotePencilFill className="m-3 text-xl font-bold" />,
     },
     {
       text: "Inventario",
       icon: <BsBoxSeam className="m-3 text-xl font-bold" />,
-      onClick: handleInventoryClick,
+      link: "/inventory",
     },
     {
       text: "Clientes",
@@ -50,29 +46,24 @@ const Sidebar = () => {
       icon: <HiOutlineUserGroup className="m-3 text-xl font-bold" />,
     },
     {
-      text: "Ventas",
-      onClick: handleVentasClick,
-      icon: <GiMoneyStack className="m-3 text-xl font-bold" />,
-    },
-    {
       text: "Empleados",
       link: "/employee",
       icon: <BsFileEarmarkSpreadsheet className="m-3 text-xl font-bold" />,
     },
     {
-      text: "Proyectos",
+      text: "categorias",
       link: "/proyectos",
-      icon: <AiOutlineFundProjectionScreen className="m-3 text-xl font-bold" />,
+      icon: <BiSolidCategoryAlt className="m-3 text-xl font-bold" />,
     },
     {
-      text: "Cerrar Sesión",
-      link: "/api/auth/signout",
-      icon: <FiArrowLeft className="m-3  text-xl font-bold" />,
+      text: "Repositorios",
+      onClick: handleRepositoryClick,
+      icon: <FaGitAlt className="m-3 text-xl font-bold" />,
     },
   ];
 
   return (
-    <div className="fixed left-0 top-0 z-10 flex h-screen w-60 flex-col items-center bg-white py-6 shadow-md">
+    <div className="fixed left-0 top-0 z-10 flex  w-28 flex-col items-center bg-white  shadow-md">
       <Typography
         variant="h6"
         sx={{
@@ -107,42 +98,23 @@ const Sidebar = () => {
               </ListItemButton>
             </ListItem>
             {/* Renderizar el submenú si el botón de Inventario se ha hecho clic */}
-            {item.text === "Inventario" && (
-              <Collapse in={inventoryOpen}>
-                {/* Agrega tus opciones de submenú aquí */}
-                <List>
-                  <ListItem disablePadding>
-                    <ListItemButton component="a" href="/materiasPrimas">
-                      <BsBoxSeam className="m-3 text-xl font-bold" />
-                      Materias Primas
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton component="a" href="/salidasMateriasPrimas">
-                      <IoIosArrowForward className="m-3 text-xl font-bold" />
-                      Entradas y Salidas de Materia Prima
-                    </ListItemButton>
-                  </ListItem>
-                  {/* Puedes agregar más opciones de submenú según sea necesario */}
-                </List>
-              </Collapse>
-            )}
+
 
             {/* Renderizar el submenú de Ventas si el botón de Ventas se ha hecho click */}
-            {item.text === "Ventas" && (
-              <Collapse in={ventasOpen}>
+            {item.text === "Repositorios" && (
+              <Collapse in={repositoryOpen}>
                 {/* Agrega tus opciones de submenú de Ventas aquí */}
                 <List>
                   <ListItem disablePadding>
-                    <ListItemButton component="a" href="/ventas">
-                      <GiPayMoney className="m-3 text-xl font-bold" />
-                      Ventas
+                    <ListItemButton component="a" href="https://github.com/Foxy20122012/MF_TEST_API">
+                      <VscGithubAction className="m-3 text-xl font-bold" />
+                      Bancked
                     </ListItemButton>
                   </ListItem>
                   <ListItem disablePadding>
-                    <ListItemButton component="a" href="/pedidos">
-                      <FiBox className="m-3 text-xl font-bold" />
-                      Pedidos
+                    <ListItemButton component="a" href="https://github.com/Foxy20122012/MF_TEST_DEMO">
+                      <PiGithubLogoLight className="m-3 text-xl font-bold" />
+                      Frontend
                     </ListItemButton>
                   </ListItem>
                   {/* Puedes agregar más opciones de submenú de Ventas según sea necesario */}
