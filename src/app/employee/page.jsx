@@ -7,7 +7,7 @@ import DataGrid, { Column, ColumnChooser, ColumnFixing, Editing, Popup, Paging, 
     SearchPanel, FilterRow, HeaderFilter, FilterPanel, FilterBuilderPopup, Scrolling, Item } from "devextreme-react/data-grid";
     
 
-class App extends React.Component {
+class Employee extends React.Component {
     constructor(props) {
         super(props);
 
@@ -16,7 +16,7 @@ class App extends React.Component {
             showRowLines: true,
             showBorders: true,
             rowAlternationEnabled: true,
-            employees: []
+            employees: props.testEmployees || []
         };
 
         this.dataGridRef = React.createRef();
@@ -24,7 +24,9 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+      if (!this.props.testEmployees) {
         this.getEmployee();
+    }
       }
     
       getEmployee = () => {
@@ -116,10 +118,15 @@ class App extends React.Component {
             showRowLines,
             showBorders,
             rowAlternationEnabled,
+            employees
           } = this.state;
         return (
+          <div>
+        <div>Empleados</div>
             <React.Fragment>
+                
                 <DataGrid
+                 
                     useIcons
                     ref={this.dataGridRef}
                     dataSource={this.state.employees}
@@ -214,6 +221,7 @@ class App extends React.Component {
                     <Column dataField="activo" caption="Activo" dataType="boolean" />
                 </DataGrid>
             </React.Fragment>
+            </div>
         );
     }
 
@@ -235,4 +243,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default Employee;

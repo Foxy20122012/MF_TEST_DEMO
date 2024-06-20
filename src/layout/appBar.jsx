@@ -11,7 +11,7 @@ import { AiOutlinePicRight } from 'react-icons/ai'
 import Sidebar from './Sidebar' // Ajusta la ruta de importación según la estructura de tu proyecto
 
 const MainLayout = () => {
-  const [showSidebar, setShowSidebar] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(true)
 
   const handleToggleSidebar = () => {
     setShowSidebar(!showSidebar)
