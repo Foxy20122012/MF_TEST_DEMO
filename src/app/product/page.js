@@ -1,6 +1,6 @@
 'use client'
 import React from "react";
-import EmployeeService from "@/services/rrhh/employees/employeeService";
+import ProductService from "@/services/warehouse/products/products";
 import 'devextreme/dist/css/dx.light.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import DataGrid, { Column, Editing, Popup, Paging, Form, Pager, Item, SearchPanel, FilterRow, Scrolling } from "devextreme-react/data-grid";
@@ -8,12 +8,11 @@ import ResponseHandler from '@/module/handler/responseHandler';
 import Messages from '@/template/component/messages';
 import { LoadPanel } from 'devextreme-react/load-panel';
 
-
 const allowedPageSizes = [5, 10, 20];
 
-class Employee extends React.Component {
-    
-    request = new EmployeeService();
+export default class product extends React.Component {
+
+    request = new ProductService();
 
     constructor(props) {
         super(props);
@@ -22,7 +21,7 @@ class Employee extends React.Component {
             showRowLines: true,
             showBorders: true,
             rowAlternationEnabled: true,
-            employees: props.testEmployees || [],
+            products: props.products || [],
             focusedRowKey: null,
             showLoader: false
         }; 
@@ -31,17 +30,17 @@ class Employee extends React.Component {
     }
 
     componentDidMount() {
-        if (!this.props.testEmployees) {
-            this.getEmployee();
+        if (!this.props.products) {
+            this.getProduct();
         }
     }
-
-    getEmployee = () => {
+    
+    getProduct = () => {
         this.setState({ showLoader: true });
-        this.request.getEmployee()
+        this.request.getProducts()
             .then(ok => {
                 this.setState({
-                    employees: ok.data,
+                    products: ok.data,
                     showLoader: false
                 });
             })
@@ -51,43 +50,43 @@ class Employee extends React.Component {
             });
     }
 
-    addEmployee = (data) => {
-        this.request.addEmployee(data)
+    addProduct = (data) => {
+        this.request.addProducts(data)
             .then(ok => {
-                this.getEmployee(); // Refresca la lista de empleados
-                ResponseHandler.success('Empleado agregado exitosamente');
+                this.getProduct(); // Refresca la lista de empleados
+                ResponseHandler.success('Agregado exitosamente');
             })
             .catch(error => {
-                console.error('Error agregando empleado:', error);
+                console.error('Error agregando:', error);
                 ResponseHandler.error(error);
             });
     }
 
-    updateEmployee = (id, newData) => {
-        const oldData = this.state.employees.find(emp => emp.id === id);
+    updateProduct = (id, newData) => {
+        const oldData = this.state.products.find(pdt => pdt.id === id);
         const updatedData = { ...oldData, ...newData }; // Fusiona los datos antiguos con los nuevos
-        this.request.updateEmployee(id, updatedData)
+        this.request.updateProducts(id, updatedData)
             .then(ok => {
-                this.getEmployee(); // Refresca la lista de empleados
+                this.getProduct(); // Refresca la lista de empleados
                 ResponseHandler.success(' exitosamente');
             })
             .catch(error => {
-                console.error('Error actualizando empleado:', error);
+                console.error('Error actualizando:', error);
                 ResponseHandler.error(error);
             });
     }
 
-    deleteEmployee = (id) => {
-        this.request.deleteEmployee(id)
+    deleteProduct = (id) => {
+        this.request.deleteProducts(id)
             .then(ok => {
-                this.getEmployee(); // Refresca la lista de empleados
-                
+                this.getProduct(); // Refresca la lista de empleados                
             })
             .catch(error => {
-                console.error('Error eliminando empleado:', error);
+                console.error('Error eliminando:', error);
                 ResponseHandler.error(error);
             });
     }
+
 
     onToolbarPreparing(e) {
         e.toolbarOptions.items.unshift(
@@ -106,15 +105,16 @@ class Employee extends React.Component {
         this.dataGridRef.current.instance.refresh();
     }
 
-    render() {
-        const { showColumnLines, showRowLines, rowAlternationEnabled, employees, focusedRowKey } = this.state;
-        return (
+
+    render(){
+        const { showColumnLines, showRowLines, rowAlternationEnabled, products, focusedRowKey } = this.state;
+        return(
             <div>
                 <React.Fragment>
-                    <DataGrid
+                <DataGrid
                         useIcons
                         ref={this.dataGridRef}
-                        dataSource={this.state.employees}
+                        dataSource={this.state.products}
                         keyExpr="id"
                         showBorders={true}
                         onToolbarPreparing={this.onToolbarPreparing}
@@ -138,11 +138,11 @@ class Employee extends React.Component {
                                     const key = e.changes[0].key; // Obtener la key de la tarea
                                     if (key && typeof key === "string" && key.startsWith("_DX_KEY_")) {
                                         // Es una inserción
-                                        this.addEmployee(cambios);
+                                        this.addProduct(cambios);
                                     } else {
                                         // Es una actualización
                                         const id = key;
-                                        this.updateEmployee(id, cambios);
+                                        this.updateProduct(id, cambios);
                                     }
                                 } else {
                                     e.cancel = true; // Cancelar la operación si el usuario cancela la confirmación
@@ -152,20 +152,20 @@ class Employee extends React.Component {
       
                         onRowRemoving={async (e) => {
                             // Ejecutar eliminación sin confirmación personalizada
-                            this.deleteEmployee(e.data.id);
+                            this.deleteProduct(e.data.id);
                         }}
                     >
                         <Scrolling mode="standard" />
                         <Paging defaultPageSize={10} />
                         <Pager showPageSizeSelector={true} allowedPageSizes={allowedPageSizes} showInfo={true} />
-                        <SearchPanel visible={true} highlightCaseSensitive={true} placeholder='Buscar empleado'/>
+                        <SearchPanel visible={true} highlightCaseSensitive={true} placeholder='Buscar'/>
                         <Column dataField="id" caption="ID" />
-                        <Column dataField="first_name" caption="First Name" />
-                        <Column dataField="last_name" caption="Last Name" />
-                        <Column dataField="email" caption="Email" />
-                        <Column dataField="phone" caption="Phone" />
-                        <Column dataField="job_title" caption="Job Title" />
-                        <Column dataField="salary" caption="Salary" />
+                        <Column dataField="name" caption="Name" />
+                        <Column dataField="description" caption="Description" />
+                        <Column dataField="price" caption="price" />
+                        <Column dataField="category_id" caption="Category Id" />
+                        <Column dataField="sku" caption="Sku" />
+                        <Column dataField="stock" caption="Stock" />
                         <Column dataField="created_at" caption="Created At" dataType="date" />
                         <FilterRow visible={true} />
                         <Editing
@@ -174,24 +174,22 @@ class Employee extends React.Component {
                             allowAdding={true}
                             allowUpdating={true}
                             allowDeleting={true}
-                            onRowInserting={(e) => this.addEmployee(e.data)}
-                            onRowUpdating={(e) => this.updateEmployee(e.key, e.newData)}
+                            onRowInserting={(e) => this.addProduct(e.data)}
+                            onRowUpdating={(e) => this.updateProduct(e.key, e.newData)}
                         >
-                            <Popup title="Employee Info" showTitle={true} width={700} height={525} />
+                            <Popup title="Products Info" showTitle={true} width={700} height={525} />
                             <Form>
-                                <Item dataField="first_name" />
-                                <Item dataField="last_name" />
-                                <Item dataField="email" />
-                                <Item dataField="phone" />
-                                <Item dataField="job_title" />
-                                <Item dataField="salary" />
+                                <Item dataField="name" />
+                                <Item dataField="description" />
+                                <Item dataField="price" />
+                                <Item dataField="category_id" />
+                                <Item dataField="sku" />
+                                <Item dataField="stock" />
                             </Form>
                         </Editing>
                     </DataGrid>
                 </React.Fragment>
             </div>
-        );
+        )
     }
 }
-
-export default Employee;

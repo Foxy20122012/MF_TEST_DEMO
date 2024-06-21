@@ -17,7 +17,11 @@ module.exports = {
                 warehouse:{
                     products:{
                         products: '/api/products',
-                        productDestails: '/api/productdetails'
+                        productDestails: '/api/productdetails',
+                        category: '/api/categories'
+                    },
+                    inventory:{
+                        inventory: '/api/inventory'
                     }
                 },
                 sales:{

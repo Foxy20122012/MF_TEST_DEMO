@@ -1,6 +1,6 @@
 'use client'
 import React, { Component } from "react";
-import CustomersService from "@/services/sales/customers/customers"
+import ProductDestailsService from "@/services/warehouse/products/productDetails"
 import 'devextreme/dist/css/dx.light.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import DataGrid, { Column, Editing, Popup, Paging, Form, Pager, Item, SearchPanel, FilterRow, Scrolling } from "devextreme-react/data-grid";
@@ -10,89 +10,88 @@ import { LoadPanel } from 'devextreme-react/load-panel';
 
 const allowedPageSizes = [5, 10, 20];
 
-export default class ProductsPage extends Component{
-  request = new CustomersService();
+export default class ProductsDetailsPage extends Component{
+
+  request = new ProductDestailsService();
+
 
   constructor(props) {
-      super(props);
-      this.state = {
-          showColumnLines: true,
-          showRowLines: true,
-          showBorders: true,
-          rowAlternationEnabled: true,
-          customers: props.testCustomers || [],
-          focusedRowKey: null,
-          showLoader: false
-      }; 
-      this.dataGridRef = React.createRef();
-      this.onToolbarPreparing = this.onToolbarPreparing.bind(this);
-  }
-
-  componentDidMount() {
-      if (!this.props.testCustomers) {
-          this.getCustomer();
-      }
-  }
-
-  getCustomer = () => {
-      this.setState({ showLoader: true });
-      this.request.getCustomer()
-          .then(ok => {
-              this.setState({
-                  customers: ok.data,
-                  showLoader: false
-              });
-          })
-          .catch(error => {
-              this.setState({ showLoader: false });
-              ResponseHandler.error(error);
-          });
-  }
-
-
-
-  addCustomer = (data) => {
-    this.request.addCustomer(data)
-        .then(ok => {
-            this.getCustomer(); // Refresca la lista de empleados
-            ResponseHandler.success('Agregado exitosamente');
-        })
-        .catch(error => {
-            console.error('Error agregando ', error);
-            ResponseHandler.error(error);
-        });
+    super(props);
+    this.state = {
+        showColumnLines: true,
+        showRowLines: true,
+        showBorders: true,
+        rowAlternationEnabled: true,
+        productDetails: props.productDetails || [],
+        focusedRowKey: null,
+        showLoader: false
+    }; 
+    this.dataGridRef = React.createRef();
+    this.onToolbarPreparing = this.onToolbarPreparing.bind(this);
 }
 
-updateCustomer = (id, newData) => {
-    const oldData = this.state.customers.find(ctm => ctm.id === id);
-    const updatedData = { ...oldData, ...newData }; // Fusiona los datos antiguos con los nuevos
-    this.request.updateCustomers(id, updatedData)
-        .then(ok => {
-            this.getCustomer(); // Refresca la lista de empleados
-            ResponseHandler.success(' exitosamente');
-        })
-        .catch(error => {
-            console.error('Error actualizando :', error);
-            ResponseHandler.error(error);
-        });
+componentDidMount() {
+    if (!this.props.productDetails) {
+        this.getProductDestails();
+    }
 }
 
-deleteCustomer = (id) => {
-    this.request.deleteCustomer(id)
+getProductDestails = () => {
+    this.setState({ showLoader: true });
+    this.request.getProductDestails()
         .then(ok => {
-            this.getCustomer(); // Refresca la lista de empleados
-            
+            this.setState({
+                productDetails: ok.data,
+                showLoader: false
+            });
         })
         .catch(error => {
-            console.error('Error eliminando :', error);
+            this.setState({ showLoader: false });
             ResponseHandler.error(error);
         });
 }
 
 
 
-  //
-  onToolbarPreparing(e) {
+addProductDestails = (data) => {
+this.request.addProductDestails(data)
+    .then(ok => {
+        this.getProductDestails(); // Refresca la lista de empleados
+        ResponseHandler.success('Agregado exitosamente');
+    })
+    .catch(error => {
+        console.error('Error agregando ', error);
+        ResponseHandler.error(error);
+    });
+}
+
+updateProductDestails = (id, newData) => {
+const oldData = this.state.productDetails.find(ctm => ctm.id === id);
+const updatedData = { ...oldData, ...newData }; // Fusiona los datos antiguos con los nuevos
+this.request.updateProductDestails(id, updatedData)
+    .then(ok => {
+        this.getProductDestails(); // Refresca la lista de empleados
+        ResponseHandler.success(' exitosamente');
+    })
+    .catch(error => {
+        console.error('Error actualizando :', error);
+        ResponseHandler.error(error);
+    });
+}
+
+deleteProductDestails = (id) => {
+this.request.deleteProductDestails(id)
+    .then(ok => {
+        this.getProductDestails(); // Refresca la lista de empleados
+        
+    })
+    .catch(error => {
+        console.error('Error eliminando :', error);
+        ResponseHandler.error(error);
+    });
+}
+
+onToolbarPreparing(e) {
     e.toolbarOptions.items.unshift(
         {
             location: 'before',
@@ -109,15 +108,14 @@ refreshGrid() {
     this.dataGridRef.current.instance.refresh();
 }
   render(){
-    const { showColumnLines, showRowLines, rowAlternationEnabled, customers, focusedRowKey } = this.state;
+    const { showColumnLines, showRowLines, rowAlternationEnabled, productDetails, focusedRowKey } = this.state;
     return(
-      <div>
-        Customers
-        <React.Fragment>
-        <DataGrid
+        <div>
+            <React.Fragment>
+            <DataGrid
                         useIcons
                         ref={this.dataGridRef}
-                        dataSource={this.state.customers}
+                        dataSource={this.state.productDetails}
                         keyExpr="id"
                         showBorders={true}
                         onToolbarPreparing={this.onToolbarPreparing}
@@ -141,11 +139,11 @@ refreshGrid() {
                                     const key = e.changes[0].key; // Obtener la key de la tarea
                                     if (key && typeof key === "string" && key.startsWith("_DX_KEY_")) {
                                         // Es una inserción
-                                        this.addCustomer(cambios);
+                                        this.addProductDestails(cambios);
                                     } else {
                                         // Es una actualización
                                         const id = key;
-                                        this.updateCustomer(id, cambios);
+                                        this.updateProductDestails(id, cambios);
                                     }
                                 } else {
                                     e.cancel = true; // Cancelar la operación si el usuario cancela la confirmación
@@ -155,7 +153,7 @@ refreshGrid() {
       
                         onRowRemoving={async (e) => {
                             // Ejecutar eliminación sin confirmación personalizada
-                            this.deleteCustomer(e.data.id);
+                            this.deleteProductDestails(e.data.id);
                         }}
                     >
                         <Scrolling mode="standard" />
@@ -163,13 +161,9 @@ refreshGrid() {
                         <Pager showPageSizeSelector={true} allowedPageSizes={allowedPageSizes} showInfo={true} />
                         <SearchPanel visible={true} highlightCaseSensitive={true} placeholder='Buscar'/>
                         <Column dataField="id" caption="ID" />
-                        <Column dataField="first_name" caption="First Name" />
-                        <Column dataField="last_name" caption="Last Name" />
-                        <Column dataField="email" caption="Email" />
-                        <Column dataField="phone" caption="Phone" />
-                        <Column dataField="address" caption="Address" />
-                        <Column dataField="city" caption="city" />
-                        <Column dataField="country" caption="country" />
+                        <Column dataField="product_id" caption="Product Id" />
+                        <Column dataField="attribute" caption="Attribute" />
+                        <Column dataField="value" caption="Value" />
                         <Column dataField="created_at" caption="Created At" dataType="date" />
                         <FilterRow visible={true} />
                         <Editing
@@ -178,25 +172,19 @@ refreshGrid() {
                             allowAdding={true}
                             allowUpdating={true}
                             allowDeleting={true}
-                            onRowInserting={(e) => this.addCustomer(e.data)}
-                            onRowUpdating={(e) => this.updateCustomer(e.key, e.newData)}
+                            onRowInserting={(e) => this.addProductDestails(e.data)}
+                            onRowUpdating={(e) => this.updateProductDestails(e.key, e.newData)}
                         >
-                            <Popup title="Customer Info" showTitle={true} width={700} height={525} />
+                            <Popup title="Product Details Info" showTitle={true} width={700} height={525} />
                             <Form>
-                                <Item dataField="first_name" />
-                                <Item dataField="last_name" />
-                                <Item dataField="email" />
-                                <Item dataField="phone" />
-                                <Item dataField="address" />
-                                <Item dataField="city" />
-                                <Item dataField="country" />
+                                <Item dataField="product_id" />
+                                <Item dataField="attribute" />
+                                <Item dataField="value" />
                             </Form>
                         </Editing>
                     </DataGrid>
-        </React.Fragment>
-      </div>
-
+            </React.Fragment>
+        </div>
     )
   }
 }
-
