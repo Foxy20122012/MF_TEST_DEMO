@@ -27,12 +27,12 @@ const Sidebar = () => {
   const sidebarItems = [
     {
       text: "Productos",
-      link: "/products",
+      link: "/product",
       icon: <FaBoxes className=" text-xl font-bold" />,
     },
     {
       text: "Detalles productos",
-      link: "/nota",
+      link: "/productDetails",
       icon: <PiNotePencilFill className="m-3 text-xl font-bold" />,
     },
     {
@@ -42,7 +42,7 @@ const Sidebar = () => {
     },
     {
       text: "Clientes",
-      link: "/clientes",
+      link: "/",
       icon: <HiOutlineUserGroup className="m-3 text-xl font-bold" />,
     },
     {
@@ -52,7 +52,7 @@ const Sidebar = () => {
     },
     {
       text: "categorias",
-      link: "/proyectos",
+      link: "/category",
       icon: <BiSolidCategoryAlt className="m-3 text-xl font-bold" />,
     },
     {

@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "cypress:open": "set IGNORE_RESIZE_OBSERVER_ERRORS=1 && cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -15,6 +17,7 @@
     "@fortawesome/fontawesome-free": "^6.5.2",
     "@mui/material": "^5.15.19",
     "axios": "^1.7.2",
+    "cypress": "^13.12.0",
     "devextreme": "^23.2.6",
     "devextreme-react": "^23.2.6",
     "docker-compose": "^0.24.8",
