@@ -110,6 +110,7 @@ class Employee extends React.Component {
         const { showColumnLines, showRowLines, rowAlternationEnabled, employees, focusedRowKey } = this.state;
         return (
             <div>
+                Employee
                 <React.Fragment>
                     <DataGrid
                         useIcons
